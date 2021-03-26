@@ -1,0 +1,104 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.11
+      uses: actions/setup-java@v1
+      with: 
+        java-version: 1.11
+    #############bonus#############
+    #- name: Cache Gradle packages
+    #  uses: actions/cache@v2
+    #  with:
+    #    path: |
+    #      ~/.gradle/caches
+    #      ~/.gradle/wrapper
+    #    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+    #    restore-keys: |
+    #      ${{ runner.os }}-gradle-
+    ###############################
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build #-x test #build without testing
+    #############bonus#############
+    #- name: Cleanup Gradle Cache
+    ## Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+    ## Restoring these files from a GitHub Actions cache might cause problems for future builds.
+    #  run: |
+    #    rm -f ~/.gradle/caches/modules-2/modules-2.lock
+    #    rm -f ~/.gradle/caches/modules-2/gc.properties
+    ###############################
+    - name: Upload jar????
+      uses: actions/upload-artifact@v2
+      with:
+        name: buildJar
+        path: build/libs
+
+  test:
+  
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      uses: ./gradlew test
+    - name: Upload test reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: testReport
+        path: build/reports
+    
+  assemble:
+    
+    runs-on: ubuntu-latest
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
+    outputs:
+      gradleVersion: ${{ steps.step1.outputs.version }}
+    steps:
+    - id: step1
+      run: echo "::set-output name=version::hello"?????????????????????
+    - uses: actions/checkout@v2
+    - name: Assemble jar
+      uses: ./gradlew jar
+
+    
+    
+  release:
+  
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    needs: assemble
+    runs-on: ubuntu-latest
+    
+    steps:  
+    - uses: actions/checkout@v2
+    - name: Download buildJar
+      uses: actions/download-artifact@v2
+      with:
+        name: buildJar
+    - name: Release jar
+      uses: softprops/action-gh-release@v1
+      with:
+          files: ${{needs.assemble.env.REPO_NAME}}-${{needs.assemble.outputs.gradleVersion}}.jar #?????????
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    
+    
