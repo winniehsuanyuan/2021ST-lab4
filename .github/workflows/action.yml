@@ -94,6 +94,8 @@ jobs:
         name: buildJar
     - name: Release jar
       uses: softprops/action-gh-release@v1
+      with:
+        name: buildJar
       #with:
           #files: ${{needs.assemble.env.REPO_NAME}}-${{needs.assemble.outputs.gradleVersion}}.jar #????:
       env:
