@@ -34,7 +34,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Compile with Gradle
-      run:  ./gradlew compileTestJava #-x test #build without testing
+      run:  ./gradlew compileTestJava #or compileJava
     #############bonus#############
     #- name: Cleanup Gradle Cache
     ## Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
@@ -63,11 +63,11 @@ jobs:
 
     needs: [build, test]
     runs-on: ubuntu-latest
-    outputs:
-      gradleVersion: ${{ steps.step1.outputs.version }}
+    #outputs:
+    #  gradleVersion: ${{ steps.step1.outputs.version }}
     steps:
-    - id: step1
-      run: echo "::set-output name=version::hello"
+    #- id: step1
+    #  run: echo "::set-output name=version::hello"
     - uses: actions/checkout@v2
     - name: Assemble jar
       run:  ./gradlew assemble
@@ -90,13 +90,15 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: buildJar
+    - name: Get gradle version
+      run: |
+        echo ::set-env name=GRADLE_VERSION::"$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')"
     - name: Release jar
       uses: softprops/action-gh-release@v1
-      #with:
-      #  name: buildJar
       with:
           files: lab4-1.0-SNAPSHOT.jar
-          #files: ${{needs.assemble.env.REPO_NAME}}-${{needs.assemble.outputs.gradleVersion}}.jar #????:
+          asset_name: ${{ github.event.repository.name }}-$GRADLE_VERSION.jar
+          #files: ${{needs.assemble.env.REPO_NAME}}-$GRADLE_VERSION.jar #????:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
