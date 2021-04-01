@@ -34,7 +34,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Compile with Gradle
-      run: ./gradle compile #-x test #build without testing
+      run:  gradle compile #-x test #build without testing
     #############bonus#############
     #- name: Cleanup Gradle Cache
     ## Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
@@ -52,7 +52,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
-      uses: ./gradle test
+      uses: gradle test
     - name: Upload test reports
       uses: actions/upload-artifact@v2
       with:
@@ -71,7 +71,7 @@ jobs:
     #  run: echo "::set-output name=version::hello"?????????????????????
     - uses: actions/checkout@v2
     - name: Assemble jar
-      run: ./gradle assemble
+      run:  gradle assemble
     - name: Upload jar
       uses: actions/upload-artifact@v2
       with:
