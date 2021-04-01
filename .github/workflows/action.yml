@@ -34,7 +34,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Compile with Gradle
-      run:  ./gradlew compileTestJava #or compileJava
+      run:  ./gradlew compileJava #or compileJava
     #############bonus#############
     #- name: Cleanup Gradle Cache
     ## Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
