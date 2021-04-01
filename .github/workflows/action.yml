@@ -52,7 +52,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
-      uses: gradle test
+      run: gradle test
     - name: Upload test reports
       uses: actions/upload-artifact@v2
       with:
