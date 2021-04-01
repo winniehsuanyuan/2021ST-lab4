@@ -10,10 +10,10 @@ on:
       - v0.*
 
 jobs:
-  build:
+
+  compile:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.11
@@ -46,9 +46,8 @@ jobs:
 
   test:
   
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
@@ -61,7 +60,7 @@ jobs:
     
   assemble:
 
-    needs: [build, test]
+    needs: [compile, test]
     runs-on: ubuntu-latest
     #outputs:
     #  gradleVersion: ${{ steps.step1.outputs.version }}
@@ -83,7 +82,6 @@ jobs:
     
     needs: assemble
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Download buildJar
