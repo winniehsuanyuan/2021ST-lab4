@@ -83,7 +83,7 @@ jobs:
     
     needs: assemble
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Download buildJar
@@ -92,12 +92,12 @@ jobs:
         name: buildJar
     - name: Get gradle version
       run: |
-        echo ::set-env name=GRADLE_VERSION::"$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')"
+        echo "GRADLE_VERSION:=$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')" >> $GITHUB_ENV
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
           files: lab4-1.0-SNAPSHOT.jar
-          asset_name: ${{ github.event.repository.name }}-$GRADLE_VERSION.jar
+          #asset_name: ${{ github.event.repository.name }}-$GRADLE_VERSION.jar
           #files: ${{needs.assemble.env.REPO_NAME}}-$GRADLE_VERSION.jar #????:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
