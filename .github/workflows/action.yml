@@ -88,14 +88,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: Download buildJar????
+    - name: Download buildJar
       uses: actions/download-artifact@v2
       with:
         name: buildJar
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
-          files: ${{needs.assemble.env.REPO_NAME}}-${{needs.assemble.outputs.gradleVersion}}.jar #?????????
+          files: ${{needs.assemble.env.REPO_NAME}}-${{needs.assemble.outputs.gradleVersion}}.jar #????:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
