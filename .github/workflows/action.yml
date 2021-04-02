@@ -34,15 +34,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Compile with Gradle
-      run:  ./gradlew compileJava #or compileJava
-    #############bonus#############
-    - name: Cleanup Gradle Cache
-    ## Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-    ## Restoring these files from a GitHub Actions cache might cause problems for future builds.
-      run: |
-        rm -f ~/.gradle/caches/modules-2/modules-2.lock
-        rm -f ~/.gradle/caches/modules-2/gc.properties
-    ###############################
+      run:  ./gradlew compileJava
 
   test:
   
@@ -87,8 +79,6 @@ jobs:
     - name: Get gradle version
       run: |
         echo "GRADLE_VERSION=$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')" >> $GITHUB_ENV
-    - name: check download
-      run: ls
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
