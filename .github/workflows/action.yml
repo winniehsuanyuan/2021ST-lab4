@@ -87,10 +87,12 @@ jobs:
     - name: Get gradle version
       run: |
         echo "GRADLE_VERSION:=$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')" >> $GITHUB_ENV
+    - name: test gradle version succesfully set
+      run: echo $GRADLE_VERSION
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
-          files: lab4-$GITHUB_ENV.jar
+          files: lab4-$GRADLE_VERSION.jar
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
