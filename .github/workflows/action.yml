@@ -62,11 +62,7 @@ jobs:
 
     needs: [compile, test]
     runs-on: ubuntu-latest
-    #outputs:
-    #  gradleVersion: ${{ steps.step1.outputs.version }}
     steps:
-    #- id: step1
-    #  run: echo "::set-output name=version::hello"
     - uses: actions/checkout@v2
     - name: Assemble jar
       run:  ./gradlew assemble
@@ -94,9 +90,7 @@ jobs:
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
-          files: lab4-1.0-SNAPSHOT.jar
-          #asset_name: ${{ github.event.repository.name }}-$GRADLE_VERSION.jar
-          #files: ${{needs.assemble.env.REPO_NAME}}-$GRADLE_VERSION.jar #????:
+          files: lab4-$GITHUB_ENV.jar
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
