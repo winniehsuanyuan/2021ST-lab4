@@ -90,7 +90,7 @@ jobs:
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
-          files: lab4-${{env.GRADLE_VERSION}}.jar
+          files: buildJar/lab4-${{ env.GRADLE_VERSION }}.jar
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
