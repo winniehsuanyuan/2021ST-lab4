@@ -84,13 +84,14 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: buildJar
+        path: ./
     - name: Get gradle version
       run: |
         echo "GRADLE_VERSION:=$(cat build.gradle  | grep version | awk -F"['']" '{print $2}')" >> $GITHUB_ENV
     - name: Release jar
       uses: softprops/action-gh-release@v1
       with:
-          files: buildJar/lab4-$GRADLE_VERSION.jar
+          files: ./lab4-${{ env.GRADLE_VERSION }}.jar
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
